@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: API de Gestión de Usuarios y Publicaciones
+  description: Documentación de la API para gestionar usuarios y publicaciones
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /users:
+    get:
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Crear un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUser'
+      responses:
+        '201':
+          description: Usuario creado correctamente
+        '400':
+          description: Datos de usuario incorrectos
+  /users/{userId}:
+    get:
+      summary: Obtener un usuario por su ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID del usuario a obtener
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+    put:
+      summary: Actualizar datos de un usuario
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200':
+          description: Datos de usuario actualizados correctamente
+        '404':
+          description: Usuario no encontrado
+        '400':
+          description: Datos de usuario incorrectos
+    delete:
+      summary: Eliminar un usuario
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID del usuario a eliminar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario eliminado correctamente
+        '404':
+          description: Usuario no encontrado
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+    NewUser:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+    UpdateUser:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
